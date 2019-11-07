@@ -1,0 +1,364 @@
+<section class="horizontal-form">
+
+  {{#accordion-list showExpandAll=false as | al expandFn |}}
+  {{#accordion-list-item title=accessTitle
+    detail=accessDetail
+    expandAll=expandAll
+    expand=(action expandFn)
+    expandOnInit=true
+  }}
+
+  <div class="row">
+    <div class="col span-6 mb-0">
+      <label class="acc-label">{{t 'clusterNew.oke.tenancyOCID.label'}}{{field-required}}</label>
+      {{#input-or-display editable=(eq mode "new") value=cluster.okeEngineConfig.tenancyId}}
+      {{input type="text" name="tenancy" classNames="form-control" placeholder=(t 'clusterNew.oke.tenancyOCID.placeholder') value=cluster.okeEngineConfig.tenancyId}}
+      {{/input-or-display}}
+    </div>
+
+
+    <div class="col span-6 mb-0">
+      <label class="acc-label">{{t 'clusterNew.oke.compartmentOCID.label'}}{{field-required}}</label>
+      {{#input-or-display editable=(eq mode "new") value=cluster.okeEngineConfig.compartmentId}}
+      {{input type="text" name="compartment" classNames="form-control" placeholder=(t 'clusterNew.oke.compartmentOCID.placeholder') value=cluster.okeEngineConfig.compartmentId}}
+      {{/input-or-display}}
+    </div>
+
+    <div class="col span-6">
+      <label class="acc-label">{{t 'clusterNew.oke.region.label'}}{{field-required}}</label>
+      {{#input-or-display editable=(eq mode "new") value=selectedRegion}}
+      {{searchable-select class="form-control"
+                            content=regionChoices
+                            value=cluster.okeEngineConfig.region
+        }}
+      {{/input-or-display}}
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col span-6">
+      <label class="acc-label">{{t 'clusterNew.oke.userOcid.label'}}{{field-required}}</label>
+      {{#input-or-display editable=(or (eq mode "new") eq mode "editing") value=cluster.okeEngineConfig.userOcid}}
+      {{input type="text" name="username" classNames="form-control" placeholder=(t 'clusterNew.oke.userOcid.placeholder') value=cluster.okeEngineConfig.userOcid}}
+      {{/input-or-display}}
+    </div>
+
+    <div class="col span-6">
+      <label class="acc-label">{{t 'clusterNew.oke.userFingerprint.label'}}{{field-required}}</label>
+      {{#input-or-display editable=(or (eq mode "new") eq mode "editing") value=cluster.okeEngineConfig.fingerprint}}
+      {{input type="text" name="fingerprint" classNames="form-control" placeholder=(t 'clusterNew.oke.userFingerprint.placeholder') value=cluster.okeEngineConfig.fingerprint}}
+      {{/input-or-display}}
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class="col span-4">
+      <label class="acc-label pt-5">{{t "clusterNew.oke.secretKey.label"}}{{field-required}}</label>
+    </div>
+    {{input-text-file
+        classNames="box"
+        value=cluster.okeEngineConfig.privateKeyContents
+        multiple=False
+        canChangeName=false
+        accept="text/plain,.pem,.pkey,.key"
+        minHeight=40
+        placeholder="clusterNew.oke.secretKey.placeholder"
+        shouldChangeName=false
+        concealValue=true
+      }}
+
+  </div>
+  {{/accordion-list-item}}
+
+
+  {{#if (and refresh (eq step 1))}}
+  {{save-cancel editing=(eq mode 'edit')
+        save="authenticateOCI"
+        cancel=close
+        saveDisabled=canAuthenticate
+        createLabel="clusterNew.oke.access.next"
+        savingLabel="clusterNew.oke.access.loading"
+    }}
+  {{/if}}
+
+  {{#if (and (gte step 2) (eq mode 'edit'))}}
+  {{#accordion-list-item title=clusterTitle
+        detail=clusterDetail
+        showExpand=false
+        expandOnInit=true
+        expandAll=al.expandAll
+        expand=(action expandFn)
+      }}
+  <div class="row">
+
+    <div class="col span-4">
+      <label class="acc-label">{{t 'clusterNew.oke.version.label'}}</label>
+      {{#input-or-display editable=(or (eq mode "new") eq mode "editing") value=selectedk8sVersion}}
+      {{new-select class="form-control"
+                           content=k8sUpgradeVersionChoices
+                           value=cluster.okeEngineConfig.kubernetesVersion
+              }}
+      {{/input-or-display}}
+    </div>
+
+
+    <div class="col span-4">
+      <label class="acc-label">{{t 'clusterNew.oke.quantityPerSubnet.label'}}</label>
+      {{#input-or-display editable=(or (eq mode "new") eq mode "editing") value=cluster.okeEngineConfig.quantityPerSubnet}}
+      {{input-integer min=1 max=maxNodeCount value=cluster.okeEngineConfig.quantityPerSubnet classNames="form-control" placeholder=(t 'clusterNew.oke.quantityPerSubnet.placeholder')}}
+      <p class="help-block">
+        {{t 'clusterNew.oke.quantityPerSubnet.help'}}
+      </p>
+      {{/input-or-display}}
+    </div>
+
+  </div>
+
+  {{/accordion-list-item}}
+
+  {{!-- exit point for update/upgrade --}}
+  {{#if refresh}}
+  {{save-cancel editing=(eq mode 'edit')
+            save="upgradeCluster"
+            cancel=close
+        }}
+  {{/if}}
+
+  {{else}}
+  {{#if (gte step 2)}}
+  {{#accordion-list-item title=clusterTitle
+        detail=clusterDetail
+        showExpand=false
+        expandOnInit=true
+        expandAll=al.expandAll
+        expand=(action expandFn)
+      }}
+
+  <div class="row">
+    <div class="col span-6 mb-0">
+      <label class="acc-label">{{t 'clusterNew.oke.version.label'}}</label>
+      {{#input-or-display editable=(and (eq step 2) isNew) value=selectedk8sVersion}}
+      {{new-select class="form-control"
+                           content=k8sVersionChoices
+                           value=cluster.okeEngineConfig.kubernetesVersion
+              }}
+      {{/input-or-display}}
+    </div>
+
+    <div class="col span-6 mb-0">
+      <label class="acc-label">{{t 'clusterNew.oke.quantityPerSubnet.label'}}</label>
+      {{#input-or-display editable=(and (eq step 2) isNew) value=cluster.okeEngineConfig.quantityPerSubnet}}
+      {{input-integer min=1 max=maxNodeCount value=cluster.okeEngineConfig.quantityPerSubnet classNames="form-control" placeholder=(t 'clusterNew.oke.quantityPerSubnet.placeholder')}}
+      <p class="help-block">
+        {{t 'clusterNew.oke.quantityPerSubnet.help'}}
+      </p>
+      {{/input-or-display}}
+    </div>
+
+  </div>
+  {{/accordion-list-item}}
+  {{#if (and refresh (eq step 2))}}
+  {{save-cancel editing=(eq mode 'edit')
+            save="loadNodeConfig"
+            cancel=close
+            createLabel="clusterNew.oke.cluster.next"
+            savingLabel="clusterNew.oke.cluster.loading"
+        }}
+  {{/if}}
+  {{/if}}
+  {{#if (gte step 3)}}
+  {{#accordion-list-item title=virtualCloudNetworkTitle
+          detail=virtualCloudNetworkDetail
+          showExpand=false
+          expandOnInit=true
+          expandAll=al.expandAll
+          expand=(action expandFn)
+      }}
+
+
+  <div class="row">
+
+    <div class="col span-6">
+      {{#input-or-display
+         editable=(not-eq mode "view")
+         value=(if vcnCreationMode (t "generic.enabled") (t "generic.disabled"))
+      }}
+      <div class="radio">
+        <label>
+          {{radio-button
+              selection=vcnCreationMode
+              value="Quick"
+              disabled=(if multipleRegistries true false)
+            }}
+          {{t 'clusterNew.oke.subnetAccessOptions.quick'}}
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          {{radio-button
+              selection=vcnCreationMode
+              value="Existing"
+              disabled=(if multipleRegistries true false)
+            }}
+          {{t 'clusterNew.oke.subnetAccessOptions.existing'}}
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          {{radio-button
+              selection=vcnCreationMode
+              value="Custom"
+              disabled=(if multipleRegistries true false)
+            }}
+          {{t 'clusterNew.oke.subnetAccessOptions.custom'}}
+        </label>
+      </div>
+
+      {{#if (eq vcnCreationMode "Custom")}}
+      <div class="row">
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.subnet.label'}}{{field-required}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=selectedSubnet}}
+          {{searchable-select class="form-control"
+                content=subnetAccessChoices
+                value=cluster.okeEngineConfig.subnetAccess
+              }}
+          {{/input-or-display}}
+        </div>
+
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.cidr.label'}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.vcnCidr}}
+          {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.cidr.placeholder') value=cluster.okeEngineConfig.vcnCidr}}
+          {{/input-or-display}}
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if (eq vcnCreationMode "Existing")}}
+      <div class="row">
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.compartmentOCID'}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.vcnCompartmentId}}
+          {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.existingVCNDetails.compartmentOCIDPlaceholder') value=cluster.okeEngineConfig.vcnCompartmentId}}
+          <p class="help-block">{{t "clusterNew.oke.existingVCNDetails.compartmentOCIDHelp" }}</p>
+          {{/input-or-display}}
+        </div>
+
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.vcnName'}}{{field-required}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.vcnName}}
+          {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.existingVCNDetails.vcnNamePlaceholder') value=cluster.okeEngineConfig.vcnName}}
+          {{/input-or-display}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.lbSubnetName1'}}{{field-required}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.loadBalancerSubnetName1}}
+          {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.existingVCNDetails.lbSubnetName1Placeholder') value=cluster.okeEngineConfig.loadBalancerSubnetName1}}
+          {{/input-or-display}}
+        </div>
+
+        <div class="col span-6">
+          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.lbSubnetName2'}}{{field-required}}</label>
+          {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.loadBalancerSubnetName2}}
+          {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.existingVCNDetails.lbSubnetName2Placeholder') value=cluster.okeEngineConfig.loadBalancerSubnetName2}}
+          {{/input-or-display}}
+        </div>
+
+      </div>
+      {{/if}}
+      {{/input-or-display}}
+    </div>
+
+  </div>
+
+  {{/accordion-list-item}}
+  {{#if (and refresh (eq step 3))}}
+  {{save-cancel editing=(eq mode 'edit')
+            save="loadInstanceConfig"
+            cancel=close
+            saveDisabled=canSaveVCN
+            createLabel="clusterNew.oke.node.next"
+            savingLabel="clusterNew.oke.node.loading"
+        }}
+  {{/if}}
+  {{/if}}
+  {{#if (gte step 4)}}
+  {{#accordion-list-item title=instanceTitle
+          detail=instanceDetail
+          showExpand=false
+          expandOnInit=true
+          expandAll=al.expandAll
+          expand=(action expandFn)
+      }}
+  <div class="row">
+
+
+    <div class="row">
+      <div class="col span-6">
+        <label class="acc-label">{{t 'clusterNew.oke.nodeShape.label'}}{{field-required}}</label>
+        {{#input-or-display editable=(and (eq step 4) isNew) value=selectednodeShape}}
+        {{searchable-select class="form-control"
+                                    content=nodeShapeChoices
+                                    value=cluster.okeEngineConfig.nodeShape
+                }}
+        {{/input-or-display}}
+      </div>
+
+      <div class="col span-6">
+        <label class="acc-label">{{t 'clusterNew.oke.os.label'}}</label>
+        {{#input-or-display editable=isNew value=selectedImage}}
+        {{searchable-select class="form-control"
+                                    content=imageChoices
+                                    value=cluster.okeEngineConfig.nodeImage
+                }}
+        {{/input-or-display}}
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col span-4">
+        <label class="acc-label pt-5">{{t "clusterNew.oke.nodeSSHKey.label"}}</label>
+      </div>
+      {{input-text-file
+        classNames="box"
+        value=cluster.okeEngineConfig.nodePublicKeyContents
+        multiple=False
+        canChangeName=false
+        accept="text/plain,.pem,.pub,.key"
+        minHeight=40
+        placeholder="clusterNew.oke.nodeSSHKey.placeholder"
+        shouldChangeName=false
+        concealValue=false
+      }}
+
+    </div>
+
+
+
+  </div>
+
+  {{/accordion-list-item}}
+  {{#if (and refresh (eq step 4))}}
+  {{save-cancel editing=(eq mode 'edit')
+          saveDisabled=canCreateCluster
+          save="save"
+          cancel=close
+      }}
+  {{/if}}
+  {{/if}}
+  {{/if}}
+
+
+  {{top-errors errors=errors}}
+  {{top-errors errors=otherErrors}}
+  {{top-errors errors=clusterErrors}}
+  {{/accordion-list}}
+</section>
