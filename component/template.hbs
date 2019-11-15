@@ -52,6 +52,13 @@
       {{/input-or-display}}
     </div>
 
+    <div class="col span-6">
+      <label class="acc-label">{{t 'clusterNew.oke.secretKeyPassphrase.label'}}</label>
+      {{#input-or-display editable=(or (eq mode "new") eq mode "editing") value=cluster.okeEngineConfig.privateKeyPassphrase}}
+      {{input type="password" name="password" classNames="form-control" concealValue=true placeholder=(t 'clusterNew.oke.secretKeyPassphrase.placeholder') value=cluster.okeEngineConfig.privateKeyPassphrase}}
+      {{/input-or-display}}
+    </div>
+
   </div>
   <div class="row">
 
@@ -69,7 +76,7 @@
         shouldChangeName=false
         concealValue=true
       }}
-
+    
   </div>
   {{/accordion-list-item}}
 

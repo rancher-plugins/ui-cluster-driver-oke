@@ -115,6 +115,11 @@ const languages = {
           'provided':    'Provided',
           'required':    'User Private API Key is required'
         },
+        'secretKeyPassphrase': {
+          'label':       'User Private Key Passphrase',
+          'placeholder': 'The passphrase (if any) that protects private key file the specified OCI user',
+          'provided':    'Provided'
+        },
         'cluster': {
           'title':   'Cluster Configuration',
           'detail':  'Choose the Kubernetes version and the number of nodes per subnet for the cluster.',
@@ -288,6 +293,7 @@ export default Ember.Component.extend(ClusterDriver, {
         'errors':                                       null,
         'cluster.%%DRIVERNAME%%EngineConfig.userOcid':  (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.userOcid') || '').trim(),
         'cluster.%%DRIVERNAME%%EngineConfig.secretKey': (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.secretKey') || '').trim(),
+        'cluster.%%DRIVERNAME%%EngineConfig.privateKeyPassphrase':  (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.privateKeyPassphrase') || '').trim(),
         'cluster.%%DRIVERNAME%%EngineConfig.region':    (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.region')),
 
       });
