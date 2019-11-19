@@ -40,7 +40,6 @@ const regionMap = {
 const k8sVersionMap = {
   'v1.13.5': 'v1.13.5', // default
   'v1.12.7': 'v1.12.7',
-  'v1.11.9': 'v1.11.9',
 }
 
 const vcnIdMap = { quick: 'Quick Create', }
@@ -64,6 +63,8 @@ const nodeShapeMap = {
   'BM.Standard.B1.44': 'BM.Standard.B1.44',
   'BM.DenseIO2.52':    'BM.DenseIO2.52',
   'BM.HPC2.36':        'BM.HPC2.36',
+  'VM.Standard.E2.1.Micro':  'VM.Standard.E2.1.Micro',
+  'VM.Standard.E2.2':  'VM.Standard.E2.2',
   'VM.GPU2.1':         'VM.GPU2.1',
   'VM.GPU2.2':         'VM.GPU2.2',
   'VM.GPU3.1':         'VM.GPU3.1',
