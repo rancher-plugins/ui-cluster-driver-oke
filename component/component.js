@@ -526,7 +526,7 @@ export default Ember.Component.extend(ClusterDriver, {
     const translation = languages[lang] || languages['en-us'];
     const intl = get(this, 'intl');
 
-    intl.addTranslation(lang, 'clusterNew.oke', translation.clusterNew.oke);
+    intl.addTranslations(lang, translation);
     intl.translationsFor(lang);
     set(this, 'refresh', false);
     next(() => {
