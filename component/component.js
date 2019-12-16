@@ -151,7 +151,7 @@ const languages = {
           'vcnNamePlaceholder':         'e.g. my-vcn',
           'lbSubnetName1':              'Name of first pre-existing LB subnet',
           'lbSubnetName1Placeholder':   'e.g. my-lb-sub-1',
-          'lbSubnetName2':              'Name of second pre-existing LB subnet',
+          'lbSubnetName2':              'Name of second pre-existing LB subnet (if applicable)',
           'lbSubnetName2Placeholder':   'e.g. my-lb-sub-2',
         },
         'quantityPerSubnet': {
@@ -511,7 +511,7 @@ export default Ember.Component.extend(ClusterDriver, {
       return false;
     } else if (mode === 'Existing') {
       // Driver will use the same compartment as the cluster if not set.
-      return (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.vcnName') && get(this, 'cluster.%%DRIVERNAME%%EngineConfig.loadBalancerSubnetName1') && get(this, 'cluster.%%DRIVERNAME%%EngineConfig.loadBalancerSubnetName2')) ? false : true;
+      return (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.vcnName') && get(this, 'cluster.%%DRIVERNAME%%EngineConfig.loadBalancerSubnetName1')) ? false : true;
     } else if (mode === 'Custom') {
       return (get(this, 'cluster.%%DRIVERNAME%%EngineConfig.subnetAccess') && get(this, 'cluster.%%DRIVERNAME%%EngineConfig.vcnCidr')) ? false : true;
     }
