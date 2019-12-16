@@ -62,7 +62,7 @@
   </div>
   <div class="row">
 
-    <div class="col span-4">
+    <div class="col span-6">
       <label class="acc-label pt-5">{{t "clusterNew.oke.secretKey.label"}}{{field-required}}</label>
     </div>
     {{input-text-file
@@ -271,7 +271,7 @@
         </div>
 
         <div class="col span-6">
-          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.lbSubnetName2'}}{{field-required}}</label>
+          <label class="acc-label">{{t 'clusterNew.oke.existingVCNDetails.lbSubnetName2'}}</label>
           {{#input-or-display editable=(and (eq step 3) isNew) value=cluster.okeEngineConfig.loadBalancerSubnetName2}}
           {{input type="text" classNames="form-control" placeholder=(t 'clusterNew.oke.existingVCNDetails.lbSubnetName2Placeholder') value=cluster.okeEngineConfig.loadBalancerSubnetName2}}
           {{/input-or-display}}
