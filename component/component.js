@@ -38,7 +38,8 @@ const regionMap = {
 }
 
 const k8sVersionMap = {
-  'v1.13.5': 'v1.13.5', // default
+  'v1.14.8': 'v1.14.8', // default
+  'v1.13.5': 'v1.13.5',
   'v1.12.7': 'v1.12.7',
 }
 
@@ -260,7 +261,7 @@ export default Ember.Component.extend(ClusterDriver, {
         secretKey:         '',
         clusterName:       '',
         vcnCidr:           '10.0.0.0/16',
-        kubernetesVersion: 'v1.13.5',
+        kubernetesVersion: 'v1.14.8',
         region:            'us-phoenix-1',
         vcn:               '',
         securityListId:    '',
