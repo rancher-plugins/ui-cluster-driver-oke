@@ -35,12 +35,21 @@ const regionMap = {
   'London':    'uk-london-1',
   'Ashburn':   'us-ashburn-1',
   'Phoenix':   'us-phoenix-1',
+  'Amsterdam': 'eu-amsterdam-1',
+  'Hyderabad': 'ap-hyderabad-1',
+  'Jeddah':    'me-jeddah-1',
+  'Osaka':     'ap-osaka-1',
+  'Melbourne': 'ap-melbourne-1',
+  'Sydney':    'ap-sydney-1',
+  'Chuncheon': 'ap-chuncheon-1',
+  'Montreal':  'ca-montreal-1',
 }
 
 const k8sVersionMap = {
-  'v1.15.7': 'v1.15.7', // default
+  'v1.17.9': 'v1.17.9', // default
+  'v1.16.8': 'v1.16.8',
+  'v1.15.7': 'v1.15.7',
   'v1.14.8': 'v1.14.8',
-  'v1.13.5': 'v1.13.5',
 }
 
 const vcnIdMap = { quick: 'Quick Create', }
@@ -48,30 +57,30 @@ const vcnIdMap = { quick: 'Quick Create', }
 const subnetAccessMap = { public: 'Public', private: 'Private', }
 
 const nodeShapeMap = {
-  'VM.Standard1.1':    'VM.Standard1.1',
-  'VM.Standard1.2':    'VM.Standard1.2',
-  'VM.Standard1.4':    'VM.Standard1.4',
-  'VM.Standard1.8':    'VM.Standard1.8',
-  'VM.Standard1.16':   'VM.Standard1.16',
-  'VM.Standard2.1':    'VM.Standard2.1',
-  'VM.Standard2.2':    'VM.Standard2.2',
-  'VM.Standard2.4':    'VM.Standard2.4',
-  'VM.Standard2.8':    'VM.Standard2.8',
-  'VM.Standard2.16':   'VM.Standard2.16',
-  'VM.Standard2.24':   'VM.Standard2.24',
-  'BM.Standard.E2.64': 'BM.Standard.E2.64',
-  'BM.Standard2.52':   'BM.Standard2.52',
-  'BM.Standard.B1.44': 'BM.Standard.B1.44',
-  'BM.DenseIO2.52':    'BM.DenseIO2.52',
-  'BM.HPC2.36':        'BM.HPC2.36',
+  'VM.Standard1.1':          'VM.Standard1.1',
+  'VM.Standard1.2':          'VM.Standard1.2',
+  'VM.Standard1.4':          'VM.Standard1.4',
+  'VM.Standard1.8':          'VM.Standard1.8',
+  'VM.Standard1.16':         'VM.Standard1.16',
+  'VM.Standard2.1':          'VM.Standard2.1',
+  'VM.Standard2.2':          'VM.Standard2.2',
+  'VM.Standard2.4':          'VM.Standard2.4',
+  'VM.Standard2.8':          'VM.Standard2.8',
+  'VM.Standard2.16':         'VM.Standard2.16',
+  'VM.Standard2.24':         'VM.Standard2.24',
+  'BM.Standard.E2.64':       'BM.Standard.E2.64',
+  'BM.Standard2.52':         'BM.Standard2.52',
+  'BM.Standard.B1.44':       'BM.Standard.B1.44',
+  'BM.DenseIO2.52':          'BM.DenseIO2.52',
+  'BM.HPC2.36':              'BM.HPC2.36',
   'VM.Standard.E2.1.Micro':  'VM.Standard.E2.1.Micro',
-  'VM.Standard.E2.2':  'VM.Standard.E2.2',
-  'VM.GPU2.1':         'VM.GPU2.1',
-  'VM.GPU2.2':         'VM.GPU2.2',
-  'VM.GPU3.1':         'VM.GPU3.1',
-  'VM.GPU3.2':         'VM.GPU3.2',
-  'VM.GPU3.4':         'VM.GPU3.4',
-  'VM.GPU3.4':         'VM.GPU3.8',
+  'VM.Standard.E2.2':        'VM.Standard.E2.2',
+  'VM.GPU2.1':               'VM.GPU2.1',
+  'VM.GPU2.2':               'VM.GPU2.2',
+  'VM.GPU3.1':               'VM.GPU3.1',
+  'VM.GPU3.2':               'VM.GPU3.2',
+  'VM.GPU3.4':               'VM.GPU3.4',
+  'VM.GPU3.8':               'VM.GPU3.8',
 }
 
 const imageMap = {
@@ -261,7 +270,7 @@ export default Ember.Component.extend(ClusterDriver, {
         secretKey:         '',
         clusterName:       '',
         vcnCidr:           '10.0.0.0/16',
-        kubernetesVersion: 'v1.15.7',
+        kubernetesVersion: 'v1.17.9',
         region:            'us-phoenix-1',
         vcn:               '',
         securityListId:    '',
@@ -553,7 +562,7 @@ export default Ember.Component.extend(ClusterDriver, {
 
     const compartmentId = get(this, 'cluster.%%DRIVERNAME%%EngineConfig.compartmentId');
 
-    if (!compartmentId.startsWith('ocid1.compartment')) {
+    if (!compartmentId.startsWith('ocid1.compartment') && !compartmentId.startsWith('ocid1.tenancy')) {
       errors.push('A valid compartment OCID is required');
     }
 
